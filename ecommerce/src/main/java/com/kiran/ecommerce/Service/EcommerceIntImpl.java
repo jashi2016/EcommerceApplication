@@ -4,12 +4,16 @@ import com.kiran.ecommerce.Entity.Address;
 import com.kiran.ecommerce.Entity.Order;
 import com.kiran.ecommerce.Entity.Product;
 import com.kiran.ecommerce.Entity.User;
+import com.kiran.ecommerce.Exception.EcommerceCustomException;
 import com.kiran.ecommerce.Repository.AddressRepository;
 import com.kiran.ecommerce.Repository.OrderRepository;
 import com.kiran.ecommerce.Repository.ProductRepository;
 import com.kiran.ecommerce.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EcommerceIntImpl implements EcommerceInt{
@@ -51,6 +55,11 @@ public class EcommerceIntImpl implements EcommerceInt{
     }
 
     @Override
+    public Order getOrderById(Integer id) {
+        return orderRepository.findById(id).get();
+    }
+
+    @Override
     public Order createOrder(Order order1) {
         return orderRepository.save(order1);
     }
@@ -58,5 +67,23 @@ public class EcommerceIntImpl implements EcommerceInt{
     @Override
     public Address saveAddress(Address address1) {
         return addressRepository.save(address1);
+    }
+
+    @Override
+    public List<Product> getAllProductsByCategory(String category) {
+        List<Product> productsbycategory = productRepository.findAll().stream().filter(e->e.getCategory().equalsIgnoreCase(category)).collect(Collectors.toList());
+        return productsbycategory;
+    }
+
+    @Override
+    public Product deleteProductById(Integer id) {
+        try{
+            Product product = productRepository.findById(id).get();
+            productRepository.deleteById(id);
+            return product;
+        }
+        catch (Exception e){
+            throw new EcommerceCustomException("No Product Found");
+        }
     }
 }
