@@ -14,7 +14,7 @@ public class Address {
     String zipcode;
     String state;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id_user_id")
     User userId;
 

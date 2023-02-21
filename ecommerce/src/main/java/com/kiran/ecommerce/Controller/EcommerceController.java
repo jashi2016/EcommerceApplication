@@ -5,7 +5,6 @@ import com.kiran.ecommerce.Entity.Order;
 import com.kiran.ecommerce.Entity.Product;
 import com.kiran.ecommerce.Entity.User;
 import com.kiran.ecommerce.Exception.EcommerceCustomException;
-import com.kiran.ecommerce.Repository.UserRepository;
 import com.kiran.ecommerce.Service.EcommerceInt;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +107,7 @@ public class EcommerceController {
         catch (Exception e) {
             throw new EcommerceCustomException("No Product Found");
         }
-
+        order1.setProductQuantity(Integer.parseInt(jsonObject.getString("productQuantity")));
         return ecommerceInt.createOrder(order1);
     }
 

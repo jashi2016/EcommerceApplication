@@ -79,7 +79,13 @@ public class EcommerceIntImpl implements EcommerceInt{
     public Product deleteProductById(Integer id) {
         try{
             Product product = productRepository.findById(id).get();
-            productRepository.deleteById(id);
+            try{
+                productRepository.deleteById(id);
+            }
+            catch (Exception e)
+            {
+                throw new EcommerceCustomException("Product could not be deleted as order was in progress");
+            }
             return product;
         }
         catch (Exception e){
